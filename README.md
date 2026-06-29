@@ -1,5 +1,5 @@
 
-## How to compile
+Automatic bindings of the [PMP Library](https://github.com/pmp-library/pmp-library) using Rosetta
 
 ### Fetch PMP and Rosetta
 

@@ -3,6 +3,7 @@
     "//paths": "All relative paths resolve from THIS file's directory (the project root).",
     "//algorithms": "In this PMP version the algorithms are FREE FUNCTIONS (the old Surface* algorithm classes were refactored away), so they live under \"functions\". SurfaceMesh + the supporting handle/value/enum types live under \"classes\".",
     "//skipped": "Overloaded names (pmp::centroid, pmp::cholesky_solve, pmp::triangulate) and the template pmp::barycentric_coordinates are omitted: ^^name is ill-formed for overloads/templates. Bind a specific signature if you need them.",
+    "//skipped-eigen": "All laplace.h and numerics.h functions are omitted: each takes an Eigen SparseMatrix/DiagonalMatrix/DenseMatrix/MatrixXd by reference (and selector_matrix a std::function), which no scripting backend can marshal — uncallable from Python/Node/etc. The non-const-ref ones also fail to compile in the node backend (a temporary returned by from_napi<T> can't bind to a non-const T& for an unwrapped type). The manifest has no per-backend function filter, so they are dropped for all targets.",
 
     "cpp26_root": "$ENV{HOME}/devs/c++/clang-p2996/build",
     "cpp26_cxx": "$ENV{HOME}/devs/c++/clang-p2996/build/bin/clang++",
@@ -107,24 +108,11 @@
 
         {"header": "pmp/algorithms/hole_filling.h", "name": "pmp::fill_hole", "doc": "Fill a boundary hole at a half-edge."},
 
-        {"header": "pmp/algorithms/laplace.h", "name": "pmp::uniform_mass_matrix",    "doc": "Uniform Laplacian mass matrix."},
-        {"header": "pmp/algorithms/laplace.h", "name": "pmp::uniform_laplace_matrix", "doc": "Uniform Laplace matrix."},
-        {"header": "pmp/algorithms/laplace.h", "name": "pmp::mass_matrix",            "doc": "Lumped cotangent mass matrix."},
-        {"header": "pmp/algorithms/laplace.h", "name": "pmp::laplace_matrix",         "doc": "Cotangent Laplace matrix."},
-        {"header": "pmp/algorithms/laplace.h", "name": "pmp::gradient_matrix",        "doc": "Cotangent gradient matrix."},
-        {"header": "pmp/algorithms/laplace.h", "name": "pmp::divergence_matrix",      "doc": "Cotangent divergence matrix."},
-
         {"header": "pmp/algorithms/normals.h", "name": "pmp::vertex_normals", "doc": "Compute and store per-vertex normals."},
         {"header": "pmp/algorithms/normals.h", "name": "pmp::face_normals",   "doc": "Compute and store per-face normals."},
         {"header": "pmp/algorithms/normals.h", "name": "pmp::vertex_normal",  "doc": "Compute a single vertex normal."},
         {"header": "pmp/algorithms/normals.h", "name": "pmp::face_normal",    "doc": "Compute a single face normal."},
         {"header": "pmp/algorithms/normals.h", "name": "pmp::corner_normal",  "doc": "Compute a corner normal at a half-edge."},
-
-        {"header": "pmp/algorithms/numerics.h", "name": "pmp::selector_matrix",       "doc": "Selector matrix for a subset of vertices."},
-        {"header": "pmp/algorithms/numerics.h", "name": "pmp::matrices_to_mesh",      "doc": "Build a mesh from V/F matrices."},
-        {"header": "pmp/algorithms/numerics.h", "name": "pmp::mesh_to_matrices",      "doc": "Extract V/F matrices from a mesh."},
-        {"header": "pmp/algorithms/numerics.h", "name": "pmp::coordinates_to_matrix", "doc": "Vertex coordinates to an Nx3 matrix."},
-        {"header": "pmp/algorithms/numerics.h", "name": "pmp::matrix_to_coordinates", "doc": "Nx3 matrix back into vertex coordinates."},
 
         {"header": "pmp/algorithms/parameterization.h", "name": "pmp::harmonic_parameterization", "doc": "Harmonic (Tutte) parameterization."},
         {"header": "pmp/algorithms/parameterization.h", "name": "pmp::lscm_parameterization",     "doc": "Least-squares conformal parameterization."},
