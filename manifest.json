@@ -46,7 +46,7 @@
         {"lang": "python",     "name": "pmp"},
         {"lang": "nanobind",   "name": "pmp"},
         {"lang": "node",       "name": "pmp"},
-        {"lang": "wasm",       "name": "pmp"},
+        {"lang": "wasm-expanded", "name": "pmp"},
         {"lang": "typescript", "name": "pmp"},
         {"lang": "csharp",     "name": "pmp"},
         {"lang": "java",       "name": "pmp"},
