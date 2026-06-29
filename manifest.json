@@ -1,0 +1,163 @@
+{
+    "//": "Rosetta binding manifest for the PMP (Polygon Mesh Processing) library.",
+    "//paths": "All relative paths resolve from THIS file's directory (the project root).",
+    "//algorithms": "In this PMP version the algorithms are FREE FUNCTIONS (the old Surface* algorithm classes were refactored away), so they live under \"functions\". SurfaceMesh + the supporting handle/value/enum types live under \"classes\".",
+    "//skipped": "Overloaded names (pmp::centroid, pmp::cholesky_solve, pmp::triangulate) and the template pmp::barycentric_coordinates are omitted: ^^name is ill-formed for overloads/templates. Bind a specific signature if you need them.",
+
+    "cpp26_root": "$ENV{HOME}/devs/c++/clang-p2996/build",
+    "cpp26_cxx": "$ENV{HOME}/devs/c++/clang-p2996/build/bin/clang++",
+    "cpp26_cc": "$ENV{HOME}/devs/c++/clang-p2996/build/bin/clang",
+    "cpp26_lib": "$ENV{HOME}/devs/c++/clang-p2996/build/lib",
+
+    "user_include": [
+        "./extern/pmp/src",
+        "./extern/pmp/external/eigen-3.4.0"
+    ],
+    "rosetta_include": "./extern/rosetta/include",
+    "generator_name": "pmp",
+    "module_name": "pmp",
+
+    "//user_sources": "PMP headers only DECLARE the API; the bodies live in these .cpp files. Compile them straight into each binding so symbols like pmp::flip_faces resolve (no separate libpmp link, which would risk an ABI mismatch with the p2996 fork's libc++).",
+    "user_sources": [
+        "./extern/pmp/src/pmp/surface_mesh.cpp",
+        "./extern/pmp/src/pmp/algorithms/analysis.cpp",
+        "./extern/pmp/src/pmp/algorithms/curvature.cpp",
+        "./extern/pmp/src/pmp/algorithms/decimation.cpp",
+        "./extern/pmp/src/pmp/algorithms/differential_geometry.cpp",
+        "./extern/pmp/src/pmp/algorithms/distance_point_triangle.cpp",
+        "./extern/pmp/src/pmp/algorithms/fairing.cpp",
+        "./extern/pmp/src/pmp/algorithms/features.cpp",
+        "./extern/pmp/src/pmp/algorithms/geodesics.cpp",
+        "./extern/pmp/src/pmp/algorithms/hole_filling.cpp",
+        "./extern/pmp/src/pmp/algorithms/laplace.cpp",
+        "./extern/pmp/src/pmp/algorithms/normals.cpp",
+        "./extern/pmp/src/pmp/algorithms/numerics.cpp",
+        "./extern/pmp/src/pmp/algorithms/parameterization.cpp",
+        "./extern/pmp/src/pmp/algorithms/remeshing.cpp",
+        "./extern/pmp/src/pmp/algorithms/shapes.cpp",
+        "./extern/pmp/src/pmp/algorithms/smoothing.cpp",
+        "./extern/pmp/src/pmp/algorithms/subdivision.cpp",
+        "./extern/pmp/src/pmp/algorithms/triangulation.cpp",
+        "./extern/pmp/src/pmp/algorithms/utilities.cpp"
+    ],
+
+    "targets": [
+        {"lang": "python",     "name": "pmp"},
+        {"lang": "nanobind",   "name": "pmp"},
+        {"lang": "node",       "name": "pmp"},
+        {"lang": "wasm",       "name": "pmp"},
+        {"lang": "typescript", "name": "pmp"},
+        {"lang": "csharp",     "name": "pmp"},
+        {"lang": "java",       "name": "pmp"},
+        {"lang": "julia",      "name": "pmp"},
+        {"lang": "rest",       "name": "pmp"},
+        {"lang": "openapi"},
+        {"lang": "json"},
+        {"lang": "markdown"},
+        {"lang": "html"}
+    ],
+
+    "classes": [
+        {"doc": "Core half-edge surface mesh data structure.", "name": "pmp::SurfaceMesh", "header": "pmp/surface_mesh.h"},
+        {"doc": "Base class for all topological handles.",      "name": "pmp::Handle",      "header": "pmp/surface_mesh.h"},
+        {"doc": "Vertex handle.",                               "name": "pmp::Vertex",      "header": "pmp/surface_mesh.h"},
+        {"doc": "Half-edge handle.",                            "name": "pmp::Halfedge",    "header": "pmp/surface_mesh.h"},
+        {"doc": "Edge handle.",                                 "name": "pmp::Edge",        "header": "pmp/surface_mesh.h"},
+        {"doc": "Face handle.",                                 "name": "pmp::Face",        "header": "pmp/surface_mesh.h"},
+        {"doc": "Axis-aligned bounding box.",                   "name": "pmp::BoundingBox", "header": "pmp/bounding_box.h"},
+
+        {"doc": "Basic mesh-analysis report.",                  "name": "pmp::AnalysisReport",   "header": "pmp/algorithms/analysis.h"},
+        {"doc": "Type of curvature to compute.",               "name": "pmp::Curvature",        "header": "pmp/algorithms/curvature.h"},
+        {"doc": "Boundary handling for subdivision.",          "name": "pmp::BoundaryHandling", "header": "pmp/algorithms/subdivision.h"}
+    ],
+
+    "functions": [
+        {"header": "pmp/algorithms/analysis.h", "name": "pmp::analyze", "doc": "Compute a basic analysis report for a mesh."},
+
+        {"header": "pmp/algorithms/curvature.h", "name": "pmp::curvature",                        "doc": "Compute per-vertex curvature."},
+        {"header": "pmp/algorithms/curvature.h", "name": "pmp::curvature_to_texture_coordinates", "doc": "Map curvature to 1D texture coordinates."},
+
+        {"header": "pmp/algorithms/decimation.h", "name": "pmp::decimate", "doc": "Decimate (simplify) a mesh to a target vertex count."},
+
+        {"header": "pmp/algorithms/differential_geometry.h", "name": "pmp::triangle_area",      "doc": "Area of a triangle given three points."},
+        {"header": "pmp/algorithms/differential_geometry.h", "name": "pmp::face_area",          "doc": "Area of a single face."},
+        {"header": "pmp/algorithms/differential_geometry.h", "name": "pmp::surface_area",       "doc": "Total surface area of the mesh."},
+        {"header": "pmp/algorithms/differential_geometry.h", "name": "pmp::voronoi_area",       "doc": "Barycentric Voronoi area of a vertex."},
+        {"header": "pmp/algorithms/differential_geometry.h", "name": "pmp::voronoi_area_mixed", "doc": "Mixed Voronoi area of a vertex."},
+        {"header": "pmp/algorithms/differential_geometry.h", "name": "pmp::edge_area",          "doc": "Area associated with an edge."},
+        {"header": "pmp/algorithms/differential_geometry.h", "name": "pmp::volume",             "doc": "Enclosed volume of a closed mesh."},
+        {"header": "pmp/algorithms/differential_geometry.h", "name": "pmp::dual",               "doc": "Compute the dual of a mesh."},
+        {"header": "pmp/algorithms/differential_geometry.h", "name": "pmp::cotan_weight",       "doc": "Cotangent weight of an edge."},
+        {"header": "pmp/algorithms/differential_geometry.h", "name": "pmp::laplace",            "doc": "Discrete Laplace(-Beltrami) of a vertex."},
+
+        {"header": "pmp/algorithms/distance_point_triangle.h", "name": "pmp::dist_point_line_segment", "doc": "Distance from a point to a line segment."},
+        {"header": "pmp/algorithms/distance_point_triangle.h", "name": "pmp::dist_point_triangle",     "doc": "Distance from a point to a triangle."},
+
+        {"header": "pmp/algorithms/fairing.h", "name": "pmp::minimize_area",      "doc": "Area-minimizing fairing."},
+        {"header": "pmp/algorithms/fairing.h", "name": "pmp::minimize_curvature", "doc": "Curvature-minimizing fairing."},
+        {"header": "pmp/algorithms/fairing.h", "name": "pmp::fair",               "doc": "Fair the mesh (k-th order)."},
+
+        {"header": "pmp/algorithms/features.h", "name": "pmp::detect_features", "doc": "Mark edges as features by dihedral angle."},
+        {"header": "pmp/algorithms/features.h", "name": "pmp::detect_boundary", "doc": "Mark boundary edges as features."},
+        {"header": "pmp/algorithms/features.h", "name": "pmp::clear_features",  "doc": "Clear all feature flags."},
+
+        {"header": "pmp/algorithms/geodesics.h", "name": "pmp::geodesics",                       "doc": "Geodesic distances from seed vertices."},
+        {"header": "pmp/algorithms/geodesics.h", "name": "pmp::geodesics_heat",                  "doc": "Geodesic distances via the heat method."},
+        {"header": "pmp/algorithms/geodesics.h", "name": "pmp::distance_to_texture_coordinates", "doc": "Map geodesic distance to texture coordinates."},
+
+        {"header": "pmp/algorithms/hole_filling.h", "name": "pmp::fill_hole", "doc": "Fill a boundary hole at a half-edge."},
+
+        {"header": "pmp/algorithms/laplace.h", "name": "pmp::uniform_mass_matrix",    "doc": "Uniform Laplacian mass matrix."},
+        {"header": "pmp/algorithms/laplace.h", "name": "pmp::uniform_laplace_matrix", "doc": "Uniform Laplace matrix."},
+        {"header": "pmp/algorithms/laplace.h", "name": "pmp::mass_matrix",            "doc": "Lumped cotangent mass matrix."},
+        {"header": "pmp/algorithms/laplace.h", "name": "pmp::laplace_matrix",         "doc": "Cotangent Laplace matrix."},
+        {"header": "pmp/algorithms/laplace.h", "name": "pmp::gradient_matrix",        "doc": "Cotangent gradient matrix."},
+        {"header": "pmp/algorithms/laplace.h", "name": "pmp::divergence_matrix",      "doc": "Cotangent divergence matrix."},
+
+        {"header": "pmp/algorithms/normals.h", "name": "pmp::vertex_normals", "doc": "Compute and store per-vertex normals."},
+        {"header": "pmp/algorithms/normals.h", "name": "pmp::face_normals",   "doc": "Compute and store per-face normals."},
+        {"header": "pmp/algorithms/normals.h", "name": "pmp::vertex_normal",  "doc": "Compute a single vertex normal."},
+        {"header": "pmp/algorithms/normals.h", "name": "pmp::face_normal",    "doc": "Compute a single face normal."},
+        {"header": "pmp/algorithms/normals.h", "name": "pmp::corner_normal",  "doc": "Compute a corner normal at a half-edge."},
+
+        {"header": "pmp/algorithms/numerics.h", "name": "pmp::selector_matrix",       "doc": "Selector matrix for a subset of vertices."},
+        {"header": "pmp/algorithms/numerics.h", "name": "pmp::matrices_to_mesh",      "doc": "Build a mesh from V/F matrices."},
+        {"header": "pmp/algorithms/numerics.h", "name": "pmp::mesh_to_matrices",      "doc": "Extract V/F matrices from a mesh."},
+        {"header": "pmp/algorithms/numerics.h", "name": "pmp::coordinates_to_matrix", "doc": "Vertex coordinates to an Nx3 matrix."},
+        {"header": "pmp/algorithms/numerics.h", "name": "pmp::matrix_to_coordinates", "doc": "Nx3 matrix back into vertex coordinates."},
+
+        {"header": "pmp/algorithms/parameterization.h", "name": "pmp::harmonic_parameterization", "doc": "Harmonic (Tutte) parameterization."},
+        {"header": "pmp/algorithms/parameterization.h", "name": "pmp::lscm_parameterization",     "doc": "Least-squares conformal parameterization."},
+
+        {"header": "pmp/algorithms/remeshing.h", "name": "pmp::uniform_remeshing",  "doc": "Uniform isotropic remeshing."},
+        {"header": "pmp/algorithms/remeshing.h", "name": "pmp::adaptive_remeshing", "doc": "Adaptive (curvature-driven) remeshing."},
+
+        {"header": "pmp/algorithms/shapes.h", "name": "pmp::tetrahedron",  "doc": "Generate a tetrahedron."},
+        {"header": "pmp/algorithms/shapes.h", "name": "pmp::hexahedron",   "doc": "Generate a hexahedron."},
+        {"header": "pmp/algorithms/shapes.h", "name": "pmp::octahedron",   "doc": "Generate an octahedron."},
+        {"header": "pmp/algorithms/shapes.h", "name": "pmp::dodecahedron", "doc": "Generate a dodecahedron."},
+        {"header": "pmp/algorithms/shapes.h", "name": "pmp::icosahedron",  "doc": "Generate an icosahedron."},
+        {"header": "pmp/algorithms/shapes.h", "name": "pmp::icosphere",    "doc": "Generate an icosphere."},
+        {"header": "pmp/algorithms/shapes.h", "name": "pmp::quad_sphere",  "doc": "Generate a quad sphere."},
+        {"header": "pmp/algorithms/shapes.h", "name": "pmp::uv_sphere",    "doc": "Generate a UV sphere."},
+        {"header": "pmp/algorithms/shapes.h", "name": "pmp::plane",        "doc": "Generate a plane."},
+        {"header": "pmp/algorithms/shapes.h", "name": "pmp::cone",         "doc": "Generate a cone."},
+        {"header": "pmp/algorithms/shapes.h", "name": "pmp::cylinder",     "doc": "Generate a cylinder."},
+        {"header": "pmp/algorithms/shapes.h", "name": "pmp::torus",        "doc": "Generate a torus."},
+
+        {"header": "pmp/algorithms/smoothing.h", "name": "pmp::explicit_smoothing", "doc": "Explicit Laplacian smoothing."},
+        {"header": "pmp/algorithms/smoothing.h", "name": "pmp::implicit_smoothing", "doc": "Implicit Laplacian smoothing."},
+
+        {"header": "pmp/algorithms/subdivision.h", "name": "pmp::catmull_clark_subdivision", "doc": "One step of Catmull-Clark subdivision."},
+        {"header": "pmp/algorithms/subdivision.h", "name": "pmp::loop_subdivision",          "doc": "One step of Loop subdivision."},
+        {"header": "pmp/algorithms/subdivision.h", "name": "pmp::quad_tri_subdivision",      "doc": "One step of quad/tri subdivision."},
+        {"header": "pmp/algorithms/subdivision.h", "name": "pmp::linear_subdivision",        "doc": "One step of linear subdivision."},
+
+        {"header": "pmp/algorithms/utilities.h", "name": "pmp::bounds",               "doc": "Axis-aligned bounding box of the mesh."},
+        {"header": "pmp/algorithms/utilities.h", "name": "pmp::flip_faces",           "doc": "Flip the orientation of all faces."},
+        {"header": "pmp/algorithms/utilities.h", "name": "pmp::min_face_area",        "doc": "Smallest face area in the mesh."},
+        {"header": "pmp/algorithms/utilities.h", "name": "pmp::mean_edge_length",     "doc": "Mean edge length."},
+        {"header": "pmp/algorithms/utilities.h", "name": "pmp::min_edge_length",      "doc": "Smallest edge length."},
+        {"header": "pmp/algorithms/utilities.h", "name": "pmp::connected_components", "doc": "Number of connected components."}
+    ]
+}
